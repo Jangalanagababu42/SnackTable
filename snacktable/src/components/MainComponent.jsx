@@ -5,22 +5,21 @@ import { useSnack } from "./SnackContext";
 
 function MainComponent() {
   const { state, dispatch } = useSnack();
+
   const SearchedItems = (e) => {
+    console.log();
     dispatch({ type: "search", payload: e.target.value });
   };
-  //   const [snacksData, showSnacksData] = useState(snacks);
-  //   const [input, setInput] = useState("");
-  //   console.log(input);
-  //   const filteredData =
-  //     input === ""
-  //       ? snacks
-  //       : snacks.filter(
-  //           (item) =>
-  //             item.product_name.toLowerCase().includes(input.toLowerCase()) ||
-  //             item.ingredients.find((inneritem) =>
-  //               inneritem.toLowerCase().includes(input.toLowerCase())
-  //             )
-  //         );
+
+  const [sortType, setSortType] = useState(null);
+
+  const handleSort = (column) => {
+    setSortType(column);
+    if (sortType === column) {
+      setSortType(`${column}asc`);
+    }
+    dispatch({ type: column, payload: sortType });
+  };
 
   return (
     <div>
@@ -33,12 +32,32 @@ function MainComponent() {
       />
       <table style={{ width: "100%", display: "block" }}>
         <tr style={{ display: "block" }}>
-          <th style={{ width: "10%" }}>ID</th>
-          <th style={{ width: "20%" }}>Product Name</th>
-          <th>Product Weight</th>
-          <th>PRICE (INR)</th>
-          <th>Calories</th>
-          <th>Ingredients</th>
+          <th
+            style={{ width: "10%", cursor: "pointer" }}
+            name="id"
+            onClick={() => handleSort("id")}
+          >
+            ID
+          </th>
+          <th
+            style={{ width: "20%" }}
+            name="name"
+            onClick={() => handleSort("name")}
+          >
+            Product Name
+          </th>
+          <th name="weight" onClick={() => handleSort("weight")}>
+            Product Weight
+          </th>
+          <th name=" price" onClick={() => handleSort("price")}>
+            PRICE (INR)
+          </th>
+          <th name="calories" onClick={() => handleSort("calories")}>
+            Calories
+          </th>
+          <th name="ingredients" onClick={() => handleSort("ingredients")}>
+            Ingredients
+          </th>
         </tr>
         <tr style={{ display: "block" }}>
           {state.snacks.map((snack) => (
